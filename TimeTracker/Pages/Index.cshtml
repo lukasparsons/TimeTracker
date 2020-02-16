@@ -1,0 +1,101 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p>Please log your time for this week below.</p>
+</div>
+
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="row">
+            @if (Model.CheckedOut == false)
+            {
+                @if (Model.CheckedIn == false)
+                {
+                    <form method="post" asp-page-handler="ClockIn"><button class="btn btn-lg btn-primary">Clock In</button></form>
+
+                }
+                else
+                {
+                    <form method="post" asp-page-handler="ClockOut"><button class="btn btn-lg btn-warning">Clock Out</button></form>
+                }
+            }
+            else
+            {
+                <h2>Day Complete</h2>
+                <p>You've already Clocked Out for today. If this was a mistake, please see your manager.</p>
+            }
+        </div>
+        <div class="row">
+            <h3>Total Earnings this week:</h3>
+        </div>
+        <div class="row">
+            <h4>@((Model.Worker.HourlyPay * Model.Workweek.Workdays.Sum(x => (int)x.HoursWorked.TotalMinutes / 60)).ToString("C"))</h4>
+        </div>
+    </div>
+    <div class="col-md-8">
+        <h2 align="center">@Model.Workweek.StartDay.ToString("MM/dd") - @Model.Workweek.EndDay.ToString("MM/dd")</h2>
+        <table class="table">
+            <thead>
+                <tr align="center">
+                    <th></th>
+                    <th>Sunday</th>
+                    <th>Monday</th>
+                    <th>Tuesday</th>
+                    <th>Wednesday</th>
+                    <th>Thursday</th>
+                    <th>Friday</th>
+                    <th>Saturday</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr align="center">
+                    <th>Hours</th>
+                    @for (var i = 0; i < 7; i++)
+                    {
+                        var currentDay = Model.Workdays.FirstOrDefault(d => d.DayOfWeek == (DayOfWeek)i);
+                        <td>@currentDay.HoursWorked.ToString("%h")</td>
+                    }
+                </tr>
+                <tr align="center">
+                    <th>Time In</th>
+                    @for (var i = 0; i < 7; i++)
+                    {
+                        var day = Model.Workdays.FirstOrDefault(d => d.DayOfWeek == (DayOfWeek)i);
+
+                        @if (day.IsCurrentDayOfWeek && day.ClockIn != null)
+                        {
+                            <td>@day.ClockIn.GetValueOrDefault().ToString("h:mm tt")</td>
+                        }
+                        else
+                        {
+                            <td>N/A</td>
+                        }
+                    }
+                </tr>
+                <tr align="center">
+                    <th>Time Out</th>
+                    @for (var i = 0; i < 7; i++)
+                    {
+                        var day = Model.Workdays.FirstOrDefault(d => d.DayOfWeek == (DayOfWeek)i);
+
+                        @if (day.IsCurrentDayOfWeek && day.ClockOut != null)
+                        {
+                            <td>@day.ClockOut.GetValueOrDefault().ToString("h:mm tt")</td>
+                        }
+                        else
+                        {
+                            <td>N/A</td>
+                        }
+                    }
+                </tr>
+            </tbody>
+
+        </table>
+    </div>
+</div>
