@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using TimeTracker.Data;
+using TimeTracker.Models;
 
 namespace TimeTracker.Pages
 {
@@ -101,58 +102,5 @@ namespace TimeTracker.Pages
         }
 
 
-    }
-    public class Workday
-    {
-        public int Id { get; set; }
-        public DayOfWeek DayOfWeek { get; set; }
-        public DateTime? ClockIn { get; set; }
-        public DateTime? ClockOut { get; set; }
-        public bool IsCurrentDayOfWeek
-        {
-            get
-            {
-                var isCurrentDayOfWeek = this.DayOfWeek == DateTime.Now.DayOfWeek;
-                return isCurrentDayOfWeek;
-            }
-        }
-        public TimeSpan HoursWorked
-        {
-            get
-            {
-                return ClockOut - ClockIn ?? new TimeSpan();
-            }
-        }
-        public virtual Worker Worker { get; set; }
-        public virtual WorkWeek Workweek { get; set; }
-    }
-
-    public class Worker
-    {
-        public Worker()
-        {
-            Workdays = new HashSet<Workday>();
-        }
-        public int Id { get; set; }
-        public string UserName { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public string FullName { get { return $"{FirstName} {LastName}"; } }
-        public decimal HourlyPay { get; set; }
-        public virtual ICollection<Workday> Workdays { get; set; }
-    }
-
-    public class WorkWeek
-    {
-        public WorkWeek()
-        {
-            Workdays = new HashSet<Workday>();
-        }
-        public int Id { get; set; }
-        public DateTime StartDay { get; set; }
-        public DateTime EndDay { get; set; }
-        public virtual Worker Worker { get; set; }
-
-        public virtual ICollection<Workday> Workdays { get; set; }
     }
 }

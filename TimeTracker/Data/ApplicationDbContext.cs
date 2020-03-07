@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using TimeTracker.Models;
 using TimeTracker.Pages;
 using static TimeTracker.Pages.IndexModel;
 
@@ -53,7 +54,6 @@ namespace TimeTracker.Data
             {
                 StartDay = sunday,
                 EndDay = saturday,
-                Worker = Workers.Find(user.WorkerId)
             };
 
             this.Workweeks.Add(workWeek);

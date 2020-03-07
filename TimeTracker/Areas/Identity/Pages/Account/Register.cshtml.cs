@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using TimeTracker.Data;
+using TimeTracker.Models;
 using TimeTracker.Pages;
 
 namespace TimeTracker.Areas.Identity.Pages.Account
